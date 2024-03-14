@@ -31,19 +31,16 @@ allowSelfSignedHttps(
 
 
 def llm_endpoint_predict(prompt: str):
-    # Request data goes here
-    # The example below assumes JSON formatting which may be updated
-    # depending on the format your endpoint expects.
-    # More information can be found here:
-    # https://docs.microsoft.com/azure/machine-learning/how-to-deploy-advanced-entry-script
+
+    # request data
     data = {
         "input_data": {
             "input_string": [
                 # {"role": "system", "content": f"{system_prompt}"},
                 {"role": "user", "content": f"{prompt}"},
-                {"role": "assistant", "content": ""},
+                {"role": "assistant", "content": ""}
             ],
-            "parameters": {"k1": "v1", "k2": "v2"},
+            "parameters": {"max_tokens": 512}
         }
     }
 
@@ -59,7 +56,6 @@ def llm_endpoint_predict(prompt: str):
     headers = {
         "Content-Type": "application/json",
         "Authorization": ("Bearer " + API_KEY),
-        "azureml-model-deployment": "mistralai-mistral-7b-instruct",
     }
 
     req = urllib.request.Request(LLM_ENDPOINT, body, headers)
@@ -68,13 +64,14 @@ def llm_endpoint_predict(prompt: str):
         response = urllib.request.urlopen(req)
 
         result = response.read()
-        print(result)
         result = json.loads(result)["output"]
+        # print(result)
         return result
     except urllib.error.HTTPError as error:
         print("The request failed with status code: " + str(error.code))
 
-        # Print the headers - they include the requert ID and the timestamp, which are useful for debugging the failure
+        # Print the headers - they include the request ID and the timestamp, which are useful for
+        # debugging the failure
         print(error.info())
         print(error.read().decode("utf8", "ignore"))
 

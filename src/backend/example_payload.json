@@ -1,0 +1,9 @@
+{
+    "input_data": {
+        "input_string": [
+            {"role": "user", "content": "prompt"},
+            {"role": "assistant", "content": ""}
+        ],
+        "parameters": {"max_tokens": 512}
+    }
+}

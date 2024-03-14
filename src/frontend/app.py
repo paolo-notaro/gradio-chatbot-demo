@@ -41,7 +41,7 @@ tools = [python_tool, wikipedia_tool, duckduckgo_tool]
 
 
 # Replace this LLM with API Endpoint class
-llm = ChatOpenAI(openai_api_key=OPENAI_API_KEY)
+llm = AzureLLMEndpoint()
 
 # Prompt
 prompt = ChatPromptTemplate(
@@ -57,7 +57,7 @@ prompt = ChatPromptTemplate(
 
 memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
 conversational_agent = initialize_agent(
-    tools, llm, agent=AgentType.CHAT_CONVERSATIONAL_REACT_DESCRIPTION, verbose=True, memory=memory
+    tools, llm, agent=AgentType.CHAT_CONVERSATIONAL_REACT_DESCRIPTION, verbose=True, memory=memory, max_iterations=3,
 )
 
 
@@ -69,7 +69,7 @@ def predict(user_input, history):
 
 
 markdown_title = """
-    <h1>IABG Vision - IABG's Text2Vision </h1>
+    <h1>IABG-Chat - IABG's ChatGPT </h1>
     <style>
          .gradio-container-3-50-2 .prose h1 {
             text-align: center;
@@ -102,7 +102,9 @@ with gr.Blocks() as demo:
     gr.ChatInterface(predict)
 
 # Launch the gradio app for 72 hours
-demo.launch(
+demo.queue(concurrency_count=40).launch(
     # share=True,
+    server_name="0.0.0.0", 
+    server_port=8000,
     debug=True,
 )

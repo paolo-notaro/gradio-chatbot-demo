@@ -38,7 +38,7 @@ class AzureLLMEndpoint(LLM):
                 {"role": "user", "content": f"{prompt}"},
                 {"role": "assistant", "content": ""},
             ],
-            "parameters": {"k1": "v1", "k2": "v2", "max_tokens":512},
+            "parameters": {"max_tokens": 512}
             
             }
         }
@@ -54,7 +54,7 @@ class AzureLLMEndpoint(LLM):
         headers = {
             "Content-Type": "application/json",
             "Authorization": ("Bearer " + API_KEY),
-            "azureml-model-deployment": "mistralai-mistral-7b-instruct",
+            # "azureml-model-deployment": "mistralai-mistral-7b-instruct",
         }
 
         req = urllib.request.Request(LLM_ENDPOINT, body, headers)
@@ -71,6 +71,7 @@ class AzureLLMEndpoint(LLM):
             # Print the headers - they include the requert ID and the timestamp, which are useful for debugging the failure
             print(error.info())
             print(error.read().decode("utf8", "ignore"))
+            return ""
        
 
 

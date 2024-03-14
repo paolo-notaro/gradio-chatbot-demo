@@ -1,7 +1,7 @@
 {
     "input_data": {
         "input_string": [
-            {"role": "user", "content": "prompt"},
+            {"role": "user", "content": "What is the capital of Brazil?"},
             {"role": "assistant", "content": ""}
         ],
         "parameters": {"max_tokens": 512}

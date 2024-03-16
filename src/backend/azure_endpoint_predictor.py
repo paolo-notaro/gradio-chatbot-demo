@@ -38,7 +38,7 @@ class AzureLLMEndpoint(LLM):
                 {"role": "user", "content": f"{prompt}"},
                 {"role": "assistant", "content": ""},
             ],
-            "parameters": {"max_tokens": 512}
+            "parameters": {"max_tokens": 4096}
             
             }
         }

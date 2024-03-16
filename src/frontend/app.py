@@ -1,5 +1,5 @@
 import gradio as gr
-from langchain.agents import AgentType, initialize_agent
+from langchain.agents import initialize_agent
 from langchain.memory import ConversationBufferMemory
 from langchain.prompts import (
     ChatPromptTemplate,

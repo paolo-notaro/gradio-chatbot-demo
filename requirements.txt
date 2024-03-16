@@ -3,3 +3,4 @@ langchain
 python-dotenv
 wikipedia
 duckduckgo-search
+google-search-results

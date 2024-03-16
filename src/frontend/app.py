@@ -9,35 +9,33 @@ from langchain.prompts import (
     MessagesPlaceholder,
     SystemMessagePromptTemplate,
 )
-from langchain.tools import DuckDuckGoSearchRun, Tool
+from langchain_community.utilities  import PythonREPL, DuckDuckGoSearchRun, GoogleSearchAPIWrapper
+from langchain.tools import Tool
 
-# !pip -q install wikipedia
-from langchain.utilities import PythonREPL, WikipediaAPIWrapper
-
-wikipedia = WikipediaAPIWrapper()
 search = DuckDuckGoSearchRun()
+google_search = GoogleSearchAPIWrapper()
 python_repl = PythonREPL()
 
 
 python_tool = Tool(
-    name="python repl",
-    func=python_repl.run,
-    description="useful for when you need to use python to answer a question. You should input python code",
-)
-
-wikipedia_tool = Tool(
-    name="wikipedia",
-    func=wikipedia.run,
-    description="Useful for when you need to look up a topic, country or person on wikipedia",
-)
+        name = "python repl",
+        func=python_repl.run,
+        description="useful for when you need to use python to answer a question. You should input python code"
+    )
 
 duckduckgo_tool = Tool(
-    name="DuckDuckGo Search",
-    func=search.run,
-    description="Useful for when you need to do a search on the internet to find information that another tool can't find. be specific with your input.",
+    name='DuckDuckGo Search',
+    func= search.run,
+    description="Useful for when you need to do a search on the internet to find information that another tool can't find. be specific with your input."
 )
 
-tools = [python_tool, wikipedia_tool, duckduckgo_tool]
+google_tool = Tool(
+    name='Google Search',
+    func= search.run,
+    description="Useful for when you need to do a search on the Google to find the most accurate information from the internet that another tool can't find. be specific with your input."
+)
+
+tools = [python_tool, duckduckgo_tool, google_tool]
 
 
 # Replace this LLM with API Endpoint class
@@ -57,7 +55,7 @@ prompt = ChatPromptTemplate(
 
 memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
 conversational_agent = initialize_agent(
-    tools, llm, agent=AgentType.CHAT_CONVERSATIONAL_REACT_DESCRIPTION, verbose=True, memory=memory, max_iterations=3,
+    tools, llm, agent=AgentType.CHAT_CONVERSATIONAL_REACT_DESCRIPTION, verbose=True, memory=memory, max_iterations=3,handle_parsing_errors=True,
 )
 
 

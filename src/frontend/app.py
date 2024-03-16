@@ -1,7 +1,5 @@
-
 import gradio as gr
 from langchain.agents import AgentType, initialize_agent
-from src.backend.azure_endpoint_predictor import AzureLLMEndpoint
 from langchain.memory import ConversationBufferMemory
 from langchain.prompts import (
     ChatPromptTemplate,
@@ -9,9 +7,11 @@ from langchain.prompts import (
     MessagesPlaceholder,
     SystemMessagePromptTemplate,
 )
-from langchain_community.tools import DuckDuckGoSearchRun
-from langchain_community.utilities import PythonREPL, GoogleSearchAPIWrapper
 from langchain.tools import Tool
+from langchain_community.tools import DuckDuckGoSearchRun
+from langchain_community.utilities import GoogleSearchAPIWrapper, PythonREPL
+
+from src.backend.azure_endpoint_predictor import AzureLLMEndpoint
 
 search = DuckDuckGoSearchRun()
 google_search = GoogleSearchAPIWrapper()
@@ -19,21 +19,21 @@ python_repl = PythonREPL()
 
 
 python_tool = Tool(
-        name = "python repl",
-        func=python_repl.run,
-        description="useful for when you need to use python to answer a question. You should input python code"
-    )
+    name="python repl",
+    func=python_repl.run,
+    description="useful for when you need to use python to answer a question. You should input python code",
+)
 
 duckduckgo_tool = Tool(
-    name='DuckDuckGo Search',
-    func= search.run,
-    description="Useful for when you need to do a search on the internet to find information that another tool can't find. be specific with your input."
+    name="DuckDuckGo Search",
+    func=search.run,
+    description="Useful for when you need to do a search on the internet to find information that another tool can't find. be specific with your input.",
 )
 
 google_tool = Tool(
-    name='Google Search',
-    func= search.run,
-    description="Useful for when you need to do a search on the Google to find the most accurate information from the internet that another tool can't find. be specific with your input."
+    name="Google Search",
+    func=search.run,
+    description="Useful for when you need to do a search on the Google to find the most accurate information from the internet that another tool can't find. be specific with your input.",
 )
 
 tools = [python_tool, duckduckgo_tool, google_tool]
@@ -56,7 +56,13 @@ prompt = ChatPromptTemplate(
 
 memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
 conversational_agent = initialize_agent(
-    tools, llm, agent=AgentType.CHAT_CONVERSATIONAL_REACT_DESCRIPTION, verbose=True, memory=memory, max_iterations=3,handle_parsing_errors=True,
+    tools,
+    llm,
+    agent="zero-shot-react-description",
+    verbose=True,
+    memory=memory,
+    max_iterations=3,
+    handle_parsing_errors=True,
 )
 
 
@@ -103,7 +109,7 @@ with gr.Blocks() as demo:
 # Launch the gradio app for 72 hours
 demo.queue(concurrency_count=40).launch(
     # share=True,
-    server_name="0.0.0.0", 
+    server_name="0.0.0.0",
     server_port=8000,
     debug=True,
 )

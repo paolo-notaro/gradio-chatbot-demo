@@ -9,7 +9,8 @@ from langchain.prompts import (
     MessagesPlaceholder,
     SystemMessagePromptTemplate,
 )
-from langchain_community.utilities  import PythonREPL, DuckDuckGoSearchRun, GoogleSearchAPIWrapper
+from langchain_community.tools import DuckDuckGoSearchRun
+from langchain_community.utilities import PythonREPL, GoogleSearchAPIWrapper
 from langchain.tools import Tool
 
 search = DuckDuckGoSearchRun()

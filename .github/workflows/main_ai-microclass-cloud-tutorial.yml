@@ -60,14 +60,6 @@ jobs:
 
       - name: Unzip artifact for deployment
         run: unzip release.zip
-
-      - name: 'Create env file'
-        run: |
-          touch .env
-          echo API_ENDPOINT="https://ml-test-us-mistral.eastus2.inference.ml.azure.com/score" >> .env
-          echo API_KEY="IS2gk4V0n0VBlZBnfdcbdaKxdpm6fGeK" >> .env
-          cat .env
-
       
       - name: Login to Azure
         uses: azure/login@v1
